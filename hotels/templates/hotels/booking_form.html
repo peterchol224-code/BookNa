@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve {{ hotel.name }} | BookNa</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #18332c;
+        }
+
+        header {
+            background: #087f5b;
+            color: white;
+            padding: 22px 8%;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        form p {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #b7c4c0;
+            border-radius: 6px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #087f5b;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: 0;
+            border-radius: 6px;
+            background: #087f5b;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .payment-note {
+            padding: 14px;
+            background: #e6fcf5;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .errorlist {
+            color: #c92a2a;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><a href="{% url 'home' %}">BookNa</a></h1>
+    </header>
+
+    <main class="container">
+        <h2>Reserve {{ hotel.name }}</h2>
+        <p><strong>Location:</strong> {{ hotel.city }}</p>
+        <p class="price">${{ hotel.price_per_night }} per night</p>
+
+        <div class="payment-note">
+            No online payment is required. Pay when you arrive at the hotel.
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit reservation</button>
+        </form>
+    </main>
+</body>
+</html>

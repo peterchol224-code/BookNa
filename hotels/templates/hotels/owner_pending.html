@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Assignment Pending | BookNa</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #18332c;
+        }
+
+        header {
+            padding: 22px 8%;
+            background: #087f5b;
+            color: white;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 650px;
+            margin: 55px auto;
+            padding: 35px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .notice {
+            padding: 20px;
+            background: #fff3bf;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 12px 22px;
+            border: 0;
+            border-radius: 6px;
+            background: #087f5b;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>BookNa Hotel Owners</h1>
+    </header>
+
+    <main class="card">
+        <h2>Account created successfully</h2>
+
+        <div class="notice">
+            Your account is waiting for a BookNa administrator
+            to assign your hotel.
+        </div>
+
+        <p>
+            After assignment, log in again to manage room
+            availability and booking statuses.
+        </p>
+
+        <form method="post" action="{% url 'owner_logout' %}">
+            {% csrf_token %}
+            <button type="submit">Log out</button>
+        </form>
+    </main>
+</body>
+</html>

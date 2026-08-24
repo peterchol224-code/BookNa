@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ hotel.name }} Owner Dashboard | BookNa</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #18332c;
+        }
+
+        header {
+            padding: 20px 6%;
+            background: #087f5b;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header button {
+            padding: 9px 16px;
+            border: 1px solid white;
+            border-radius: 5px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .card {
+            padding: 25px;
+            margin-bottom: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07);
+        }
+
+        input,
+        select {
+            padding: 10px;
+            border: 1px solid #b7c4c0;
+            border-radius: 5px;
+        }
+
+        .save-button {
+            padding: 10px 18px;
+            border: 0;
+            border-radius: 5px;
+            background: #087f5b;
+            color: white;
+            cursor: pointer;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #dce5e2;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #e6fcf5;
+        }
+
+        .status-form {
+            display: flex;
+            gap: 7px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>{{ hotel.name }} Dashboard</h1>
+
+        <form method="post" action="{% url 'owner_logout' %}">
+            {% csrf_token %}
+            <button type="submit">Log out</button>
+        </form>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>Room availability</h2>
+            <p>
+                Update the total number of rooms customers can reserve.
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ availability_form.as_p }}
+                <button class="save-button" type="submit">
+                    Save availability
+                </button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Bookings</h2>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Reservation</th>
+                            <th>Guest</th>
+                            <th>Phone</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Guests</th>
+                            <th>Rooms</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for booking in bookings %}
+                            <tr>
+                                <td>BN-{{ booking.id }}</td>
+                                <td>{{ booking.guest_name }}</td>
+                                <td>{{ booking.guest_phone }}</td>
+                                <td>{{ booking.check_in }}</td>
+                                <td>{{ booking.check_out }}</td>
+                                <td>{{ booking.number_of_guests }}</td>
+                                <td>{{ booking.number_of_rooms }}</td>
+                                <td>
+                                    <form
+                                        class="status-form"
+                                        method="post"
+                                        action="{% url 'owner_booking_status' booking.id %}"
+                                    >
+                                        {% csrf_token %}
+
+                                        <select name="status">
+                                            {% for value, label in booking.STATUS_CHOICES %}
+                                                <option
+                                                    value="{{ value }}"
+                                                    {% if booking.status == value %}
+                                                        selected
+                                                    {% endif %}
+                                                >
+                                                    {{ label }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+
+                                        <button
+                                            class="save-button"
+                                            type="submit"
+                                        >
+                                            Update
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="8">
+                                    No bookings are available.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

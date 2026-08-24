@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Owner Login | BookNa</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #18332c;
+        }
+
+        header {
+            padding: 22px 8%;
+            background: #087f5b;
+            color: white;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 32px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #b7c4c0;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: 0;
+            border-radius: 6px;
+            background: #087f5b;
+            color: white;
+            font-size: 16px;
+        }
+
+        .errorlist {
+            color: #c92a2a;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><a href="{% url 'home' %}">BookNa</a></h1>
+    </header>
+
+    <main class="card">
+        <h2>Hotel-owner login</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
+            <button type="submit">Log in</button>
+        </form>
+
+        <p>
+            Need an account?
+            <a href="{% url 'owner_register' %}">Register here</a>
+        </p>
+    </main>
+</body>
+</html>

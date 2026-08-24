@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNa South Sudan</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #18332c;
+        }
+
+        header {
+            background: #087f5b;
+            color: white;
+            padding: 22px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .hero {
+            background: #0ca678;
+            color: white;
+            padding: 60px 8%;
+            text-align: center;
+        }
+
+        .hero h2 {
+            margin: 0 0 12px;
+            font-size: 38px;
+        }
+
+        .search-box {
+            width: 84%;
+            margin: -30px auto 35px;
+            padding: 22px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) auto;
+            gap: 12px;
+        }
+
+        .search-form input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #b7c4c0;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .search-form button {
+            padding: 13px 22px;
+            border: 0;
+            border-radius: 6px;
+            background: #087f5b;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .clear-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #087f5b;
+        }
+
+        main {
+            width: 84%;
+            margin: 0 auto 40px;
+        }
+
+        .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 24px;
+        }
+
+        .hotel-card {
+            overflow: hidden;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .hotel-photo {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #dfe8e5;
+        }
+
+        .photo-placeholder {
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #dfe8e5;
+            color: #61736e;
+        }
+
+        .hotel-content {
+            padding: 22px;
+        }
+
+        .hotel-card h3 {
+            margin-top: 0;
+            color: #087f5b;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .verified {
+            color: #087f5b;
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 11px 18px;
+            background: #087f5b;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            background: #18332c;
+            color: white;
+        }
+
+        @media (max-width: 800px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                display: block;
+                text-align: center;
+            }
+
+            header span {
+                display: block;
+                margin-top: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>BookNa</h1>
+        <span>Hotels and guesthouses across South Sudan</span>
+    </header>
+
+    <section class="hero">
+        <h2>Find your stay in South Sudan</h2>
+        <p>Search trusted hotels and guesthouses for yourself or your family.</p>
+    </section>
+
+    <section class="search-box">
+        <form class="search-form" method="get">
+            <input
+                type="text"
+                name="name"
+                placeholder="Hotel name"
+                value="{{ hotel_name }}"
+            >
+
+            <input
+                type="text"
+                name="city"
+                placeholder="City or area"
+                value="{{ city }}"
+            >
+
+            <input
+                type="number"
+                name="max_price"
+                placeholder="Maximum nightly price"
+                min="0"
+                step="0.01"
+                value="{{ max_price }}"
+            >
+
+            <button type="submit">Search</button>
+        </form>
+
+        {% if hotel_name or city or max_price %}
+            <a class="clear-link" href="{% url 'home' %}">
+                Clear search
+            </a>
+        {% endif %}
+    </section>
+
+    <main>
+        <h2>Available hotels</h2>
+
+        <div class="hotel-grid">
+            {% for hotel in hotels %}
+                <article class="hotel-card">
+                    {% with photo=hotel.photos.all.0 %}
+                        {% if photo %}
+                            <img
+                                class="hotel-photo"
+                                src="{{ photo.image.url }}"
+                                alt="{{ photo.caption|default:hotel.name }}"
+                            >
+                        {% else %}
+                            <div class="photo-placeholder">
+                                Photo coming soon
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="hotel-content">
+                        <h3>{{ hotel.name }}</h3>
+                        <p><strong>Location:</strong> {{ hotel.city }}</p>
+                        <p>{{ hotel.description }}</p>
+                        <p class="price">
+                            ${{ hotel.price_per_night }} per night
+                        </p>
+                        <p>
+                            <strong>Available rooms:</strong>
+                            {{ hotel.rooms_available }}
+                        </p>
+
+                        {% if hotel.is_verified %}
+                            <p class="verified">✓ Verified property</p>
+                        {% endif %}
+
+                        <p><strong>Phone:</strong> {{ hotel.phone }}</p>
+
+                        <a
+                            class="button"
+                            href="{% url 'hotel_detail' hotel.id %}"
+                        >
+                            View hotel and photos
+                        </a>
+                    </div>
+                </article>
+            {% empty %}
+                <p>No hotels match your search.</p>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        © 2026 BookNa South Sudan
+    </footer>
+</body>
+</html>

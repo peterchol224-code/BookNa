@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ hotel.name }} | BookNa</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #18332c;
+        }
+
+        header {
+            background: #087f5b;
+            color: white;
+            padding: 22px 8%;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            width: 86%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .hotel-summary {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            margin-bottom: 28px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .hotel-summary h2 {
+            color: #087f5b;
+            margin-top: 0;
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .verified {
+            color: #087f5b;
+            font-weight: bold;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .photo-card {
+            overflow: hidden;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .caption {
+            padding: 12px;
+            margin: 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 22px;
+            background: #087f5b;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-left: 12px;
+            color: #087f5b;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><a href="{% url 'home' %}">BookNa</a></h1>
+    </header>
+
+    <main>
+        <section class="hotel-summary">
+            <h2>{{ hotel.name }}</h2>
+            <p><strong>Location:</strong> {{ hotel.city }}</p>
+            <p><strong>Address:</strong> {{ hotel.address }}</p>
+            <p>{{ hotel.description }}</p>
+            <p class="price">${{ hotel.price_per_night }} per night</p>
+            <p><strong>Available rooms:</strong> {{ hotel.rooms_available }}</p>
+            <p><strong>Phone:</strong> {{ hotel.phone }}</p>
+
+            {% if hotel.is_verified %}
+                <p class="verified">✓ Verified property</p>
+            {% endif %}
+        </section>
+
+        <h2>Hotel photos</h2>
+
+        <section class="gallery">
+            {% for photo in hotel.photos.all %}
+                <article class="photo-card">
+                    <img
+                        src="{{ photo.image.url }}"
+                        alt="{{ photo.caption|default:hotel.name }}"
+                    >
+
+                    {% if photo.caption %}
+                        <p class="caption">{{ photo.caption }}</p>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <p>No photographs have been uploaded yet.</p>
+            {% endfor %}
+        </section>
+
+        <a
+            class="button"
+            href="{% url 'book_hotel' hotel.id %}"
+        >
+            Reserve this hotel
+        </a>
+
+        <a class="back-link" href="{% url 'home' %}">
+            Back to hotel search
+        </a>
+    </main>
+</body>
+</html>

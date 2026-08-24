@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Owner Registration | BookNa</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #18332c;
+        }
+
+        header {
+            padding: 22px 8%;
+            background: #087f5b;
+            color: white;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 600px;
+            margin: 45px auto;
+            padding: 32px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        form p {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #b7c4c0;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: 0;
+            border-radius: 6px;
+            background: #087f5b;
+            color: white;
+            font-size: 16px;
+        }
+
+        .notice {
+            padding: 14px;
+            background: #e6fcf5;
+            border-radius: 6px;
+        }
+
+        .errorlist {
+            color: #c92a2a;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><a href="{% url 'home' %}">BookNa</a></h1>
+    </header>
+
+    <main class="card">
+        <h2>Create a hotel-owner account</h2>
+
+        <p class="notice">
+            After registration, a BookNa administrator must assign
+            your hotel before you can manage availability and bookings.
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Create owner account</button>
+        </form>
+
+        <p>
+            Already registered?
+            <a href="{% url 'owner_login' %}">Owner login</a>
+        </p>
+    </main>
+</body>
+</html>
